@@ -70,7 +70,15 @@ class ProxyChecker:
         r = self.send_query(url='https://api.ipify.org/')
 
         if not r:
-            return ""
+            r = self.send_query('https://httpbin.org/ip')
+
+        if not r:
+            return ''
+
+        # parse IP using regex
+        ip_address_match = re.search(r'(?!0)(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)', r['response'])
+        if ip_address_match:
+            return ip_address_match.group(0)
 
         return r['response']
 
