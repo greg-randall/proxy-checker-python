@@ -5,19 +5,22 @@ import re
 import pycurl
 from typing import Union
 import certifi
+
+
 class ProxyChecker:
     def __init__(self, timeout: int = 5000, verbose: bool = False):
         self.timeout = timeout
-        self.verbose = verbose 
+        self.verbose = verbose
         self.proxy_judges = [
-            'https://www.proxy-listen.de/azenv.php',
+            'https://wfuchs.de/azenv.php',
             'http://mojeip.net.pl/asdfa/azenv.php',
             'http://httpheader.net/azenv.php',
-            'http://pascal.hoez.free.fr/azenv.php'
+            'http://pascal.hoez.free.fr/azenv.php',
+            'https://www.cooleasy.com/azenv.php'
         ]
 
         self.ip = self.get_ip()
-        
+
         # Checks
         if self.ip == "":
             print("ERROR: https://api.ipify.org is down. This module won't work")
@@ -42,7 +45,7 @@ class ProxyChecker:
     def check_proxy_judges(self) -> None:
         '''
             This proxy checks several urls to get the proxy availability. These are the judges.
-            There are several in this module. However, they can be nonoperational. This function 
+            There are several in this module. However, they can be nonoperational. This function
             removes the one not operative.
         '''
         checked_judges = []
@@ -50,14 +53,14 @@ class ProxyChecker:
         for judge in self.proxy_judges:
             if self.send_query(url=judge) != False:
                 checked_judges.append(judge)
-            
+
         self.proxy_judges = checked_judges
-        
+
         if len(checked_judges) == 0:
             print("ERROR: JUDGES ARE OUTDATED. CREATE A GIT BRANCH AND UPDATE SELF.PROXY_JUDGES")
             exit()
         elif len(checked_judges) == 1:
-            print('WARNING! THERE\'S ONLY 1 JUDGE!')    
+            print('WARNING! THERE\'S ONLY 1 JUDGE!')
 
     def get_ip(self) -> str:
         '''
@@ -71,8 +74,8 @@ class ProxyChecker:
 
         return r['response']
 
-    def send_query(self, proxy: Union[str, bool] = False,  url: str = None, tls = 1.3, \
-                    user: str = None, password: str = None) -> Union[bool, dict]:
+    def send_query(self, proxy: Union[str, bool] = False, url: str = None, tls=1.3,
+                   user: str = None, password: str = None) -> Union[bool, dict]:
         '''
             Sends a query to a judge to get info from judge.
             Args:
@@ -81,7 +84,7 @@ class ProxyChecker:
                 :param tls
                 :param user, str. Username for proxy
                 :param password, str. Password for proxy
-            Returns: 
+            Returns:
                 False if response is not 200. Otherwise: 'timeout': timeout,'response': response}
         '''
         response = BytesIO()
@@ -94,7 +97,7 @@ class ProxyChecker:
         c.setopt(c.TIMEOUT_MS, self.timeout)
 
         if user is not None and password is not None:
-            c.setopt(c.PROXYUSERPWD, f"{user}:{password}")            
+            c.setopt(c.PROXYUSERPWD, f"{user}:{password}")
 
         c.setopt(c.SSL_VERIFYHOST, 0)
         c.setopt(c.SSL_VERIFYPEER, 0)
@@ -118,7 +121,7 @@ class ProxyChecker:
         try:
             c.perform()
         except Exception as e:
-            #print(e)
+            # print(e)
             return False
 
         # Return False if the status is not 200
@@ -136,7 +139,7 @@ class ProxyChecker:
             'response': response
         }
 
-    def parse_anonymity(self, r:str) -> str:
+    def parse_anonymity(self, r: str) -> str:
         '''
             Obtain the anonymity of the proxy
             Args:
@@ -178,7 +181,7 @@ class ProxyChecker:
 
         return ['-', '-']
 
-    def check_proxy(self, proxy: str, check_country: bool = True, check_address: bool = False, check_all_protocols: bool = False, \
+    def check_proxy(self, proxy: str, check_country: bool = True, check_address: bool = False, check_all_protocols: bool = False,
                     protocol: Union[str, list] = None, retries: int = 1, tls: float = 1.3, user: str = None, password: str = None) -> Union[bool, dict]:
         '''
         Checks if the proxy is working.
@@ -211,9 +214,9 @@ class ProxyChecker:
             for p in protocol:
                 if p in protocols_to_test:
                     temp.append(p)
-            
+
             if len(temp) != 0:
-                protocols_to_test = temp 
+                protocols_to_test = temp
 
         elif protocol in protocols_to_test:
             protocols_to_test = [protocol]
@@ -232,7 +235,7 @@ class ProxyChecker:
 
                 if check_all_protocols == False:
                     break
-            
+
             # Do not retry if any connection was successful
             if timeout != 0:
                 break
