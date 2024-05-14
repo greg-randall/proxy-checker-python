@@ -16,7 +16,9 @@ class ProxyChecker:
             'http://mojeip.net.pl/asdfa/azenv.php',
             'http://httpheader.net/azenv.php',
             'http://pascal.hoez.free.fr/azenv.php',
-            'https://www.cooleasy.com/azenv.php'
+            'https://www.cooleasy.com/azenv.php',
+            'http://azenv.net/',
+            'http://sh.webmanajemen.com/data/azenv.php'
         ]
 
         self.ip = self.get_ip()
