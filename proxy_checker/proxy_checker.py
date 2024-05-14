@@ -75,6 +75,9 @@ class ProxyChecker:
             r = self.send_query('https://httpbin.org/ip')
 
         if not r:
+            r = self.send_query('https://cloudflare.com/cdn-cgi/trace')
+
+        if not r:
             return ''
 
         # parse IP using regex
