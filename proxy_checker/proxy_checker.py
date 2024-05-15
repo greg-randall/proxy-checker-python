@@ -118,7 +118,7 @@ class ProxyChecker:
         if proxy:
             c.setopt(c.PROXY, proxy)
             if proxy.startswith('https'):
-                c.setopt(c.SSL_VERIFYHOST, 1)
+                c.setopt(c.SSL_VERIFYHOST, 2)
                 c.setopt(c.SSL_VERIFYPEER, 1)
                 c.setopt(c.CAINFO, certifi.where())
                 if tls == 1.3:
