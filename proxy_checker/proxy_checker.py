@@ -112,8 +112,8 @@ class ProxyChecker:
         if user is not None and password is not None:
             c.setopt(c.PROXYUSERPWD, f"{user}:{password}")
 
-        c.setopt(c.SSL_VERIFYHOST, 0)
-        c.setopt(c.SSL_VERIFYPEER, 0)
+        #c.setopt(c.SSL_VERIFYHOST, 0)
+        #c.setopt(c.SSL_VERIFYPEER, 0)
 
         if proxy:
             c.setopt(c.PROXY, proxy)
